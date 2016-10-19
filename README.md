@@ -12,8 +12,8 @@ will be placed on your data/posts folder.
 
 Just execute the following lines:
 
-1. `git clone https://github.com/thibalbo/techcrunch-posts-compilation.git`
-2. `cd techcrunch-posts-compilation`
+1. `git clone https://github.com/thibalbo/techcrunch-posts-scraper.git`
+2. `cd techcrunch-posts-scraper`
 3. `virtualenv -p python3 venv`
 4. `source venv/bin/activate`
 5. `pip3 install -r requirements.txt`
