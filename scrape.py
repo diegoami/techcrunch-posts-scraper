@@ -25,6 +25,8 @@ import lxml.html
 import yaml, time, sys, json, csv, os
 from pprint import pprint
 import datetime
+import glob
+import pandas as pd
 
 
 config = yaml.safe_load(open('config.yml'))
@@ -39,6 +41,7 @@ def console_log(message):
     """
     ctime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print('[{}]'.format(ctime), message)
+
 
 
 
@@ -270,7 +273,7 @@ class TechCrunchScraper(Scraper):
         :param output: a list of dictionaries to be saved
         :param filename: filename to save the data
         """
-        with open(filename, 'w') as f:
+        with open(filename, 'w',encoding='UTF-8') as f:
             fieldnames = sorted(output[0].keys())
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
