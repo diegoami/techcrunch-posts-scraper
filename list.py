@@ -14,13 +14,20 @@ def get_retrieved_urls():
             sreader = csv.DictReader(csvr)
             for row in sreader:
                 if row['id'] not in ids:
-                    post = {'title' : u"{}".format(row['title']),
-                            'text' : u"{}".format(row['content']),
-                            'tags' :  u"{}".format(row['tags']),
-                            'url': u"{}".format(row['url']),
-                            'id': u"{}".format(row['id'])
 
-                            }
+                    post = { 'title' : u"{}".format(row['title']),
+                                'text' : u"{}".format(row['content']),
+                                'tags' :  u"{}".format(row['tags']),
+                                'url': u"{}".format(row['url']),
+                                'id': u"{}".format(row['id']),
+                                'authors' : u"{}".format(row['authors']),
+                                'category': u"{}".format(row['category']),
+                                'date': u"{}".format(row['date']),
+                                'section': u"{}".format(row['section']),
+                                'topics': u"{}".format(row['topics']),
+                                'url': u"{}".format(row['url'])
+
+                                }
                     posts.append(post)
                     ids.add(row['id'])
 
@@ -31,5 +38,5 @@ mmap = get_retrieved_urls()
 
 
 
-with  codecs.open('tech_posts_4.json', 'wb',encoding='UTF-8') as f:
+with  codecs.open('data/all_output_files.json', 'wb',encoding='UTF-8') as f:
     json.dump(mmap, f, ensure_ascii=False)

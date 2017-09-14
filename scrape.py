@@ -23,11 +23,8 @@ __version__ = '1.0'
 import requests
 import lxml.html
 import yaml, time, sys, json, csv, os
-from pprint import pprint
 import datetime
-import glob
-import pandas as pd
-
+import json
 
 config = yaml.safe_load(open('config.yml'))
 print(config)
@@ -104,6 +101,7 @@ class TechCrunchScraper(Scraper):
     """
     def __init__(self):
         self.posts = []
+
         self.url = config['URL']
         self.sections = config['Section']
         self.page = config['Page']
@@ -122,6 +120,19 @@ class TechCrunchScraper(Scraper):
         self._timeout = config.get('Request')['Timeout']
 
         print(self.sections)
+        self.load_old_links()
+
+
+    def is_link_saved(self, url):
+        return any([url == post['url'] for post in self.posts ])
+
+    def load_old_links(self):
+        if os.path.isfile('data/all_output_files.json'):
+            with open('data/all_output_files.json', 'r') as f:
+                jsmap = json.load(f)
+                self.posts = jsmap["posts"]
+
+
 
 
     def _get_page_links(self, url, section, referer=None):
@@ -258,9 +269,11 @@ class TechCrunchScraper(Scraper):
         console_log('Scraping post {}'.format(link.get('permalink')))
 
         try:
-            post_metadata = self.scrape_post(link)
-
-            self.posts.append(post_metadata)
+            if not self.is_link_saved(link['permalink']):
+                post_metadata = self.scrape_post(link)
+                self.posts.append(post_metadata)
+            else:
+                print("Skipping "+link['permalink'])
         except Exception as e:
             print(e)
             time.sleep(0.5) # so you have time to ctrl-C
@@ -273,12 +286,9 @@ class TechCrunchScraper(Scraper):
         :param output: a list of dictionaries to be saved
         :param filename: filename to save the data
         """
-        with open(filename, 'w',encoding='UTF-8') as f:
-            fieldnames = sorted(output[0].keys())
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(output)
-
+        with open('data/all_output_files.json', 'w',encoding='UTF-8') as f:
+            mmap = {"posts": self.posts}
+            json.dump(mmap , f, ensure_ascii=False)
 
     def save_flow(self, num, last=False):
         """
@@ -294,7 +304,7 @@ class TechCrunchScraper(Scraper):
             if not os.path.exists(path):
                 os.system('mkdir -p {}'.format(path))
             self.save(self.posts, self.posts_filename.format(dt=ct))
-            self.posts = []
+          
 
 
     def run(self):

@@ -16,6 +16,6 @@ Request:
   HeaderFilename: 'src/header.json'
 
 PostsFilename: 'data/posts/{dt}.csv'
-SaveBatch: 50
+SaveBatch: 5
 
 SleepTime: 2.0
