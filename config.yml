@@ -19,4 +19,4 @@ PostsFilename: 'data/posts/{dt}.csv'
 SaveBatch: 5
 
 SleepTime: 0.2
-MaxLinks: 400
+MaxLinks: 500

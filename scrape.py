@@ -328,6 +328,7 @@ class TechCrunchScraper(Scraper):
             time.sleep(self.sleep_time)
             if (scraped_urls > self.max_links):
                 print("Retrieved {} links : exiting ".format(scraped_urls ))
+                self.save_flow(scraped_urls, last=True)
                 sys.exit()
 
 
