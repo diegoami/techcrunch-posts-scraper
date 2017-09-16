@@ -108,6 +108,8 @@ class TechCrunchScraper(Scraper):
         self.max_page = config['MaxPage']
         self.min_page = config['MinPage']
         self.sleep_time = config['SleepTime']
+        self.max_links = config['MaxLinks']
+
         self.links_filename = config.get('LinksFilename')
         self.posts_filename = config.get('PostsFilename')
         self.save_batch = config.get('SaveBatch')
@@ -324,6 +326,9 @@ class TechCrunchScraper(Scraper):
             self.save_flow(scraped_urls)
 
             time.sleep(self.sleep_time)
+            if (scraped_urls > self.max_links):
+                print("Retrieved {} links : exiting ".format(scraped_urls ))
+                sys.exit()
 
 
 
